@@ -1,19 +1,19 @@
----
-title: "Pre-processing"
-output: html_document
----
-
-```{r setup, include=FALSE}
+#' ---
+#' title: "Pre-processing"
+#' output: html_document
+#' ---
+#' 
+## ----setup, include=FALSE-------------------------------------------------------------------------------
 knitr::opts_chunk$set(echo = TRUE)
-```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r import, message=FALSE, warning=FALSE}
+#' 
+#' ## R Markdown
+#' 
+#' This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+#' 
+#' When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+#' 
+## ----import, message=FALSE, warning=FALSE---------------------------------------------------------------
 library(readxl)
 flights <- read_excel("flights.xlsx")
 
@@ -21,9 +21,9 @@ library(tidyverse)
 
 flights <- flights[flights$cancelled != 1,]
 flights <- flights[flights$diverted != 1,]
-```
 
-```{r utilization-Top20-and-Bottom10}
+#' 
+## ----utilization-Top20-and-Bottom10---------------------------------------------------------------------
 df <- data.frame(tail_num = character(),
                  sum_airtime = integer(),
                  num_flights = integer(),
@@ -48,9 +48,9 @@ df$avg_delay <- df[,"total_delay"] / df[,"num_flights"]
 df$pct_delay <- df[,"n_delays"] / df[,"num_flights"]
 df <- df[order(-df$sum_airtime),]
 
-```
 
-```{r Utilization-by-Percentile}
+#' 
+## ----Utilization-by-Percentile--------------------------------------------------------------------------
 
 n_A_25pct <- round(nrow(df[df$airline == "AA",])/4,0)
 n_B_25pct <- round(nrow(df[df$airline == "BA",])/4,0)
@@ -67,9 +67,9 @@ df$Bottom25pct_BA <- ifelse(df$tail_num %in% Bottom25pct_BA, TRUE, FALSE)
 
 matrix <- as.matrix(df)
 write.csv(matrix, "data/TailNum_by_Utilization.csv")
-```
 
-```{r most-common-dests-origins}
+#' 
+## ----most-common-dests-origins--------------------------------------------------------------------------
 
 
 Top20_AA <- df[df$airline == "AA", "tail_num"][1:20]
@@ -109,9 +109,9 @@ matrix_dest <- as.matrix(df_dests)
 matrix_origins <- as.matrix(df_origins)
 write.csv(matrix_dest, "data/DestsByUtilization.csv")
 write.csv(matrix_dest, "data/OriginsByUtilization.csv")
-```
 
-```{r most-common-dest-origin-pairs}
+#' 
+## ----most-common-dest-origin-pairs----------------------------------------------------------------------
 library(readxl)
 Top_Routes <- read_excel("tableau_extracted_data/Top Dest-Origin pairs (Alpha).xlsx")
 
@@ -138,5 +138,5 @@ Top4_Routes <- df_pairs[1:4,]
 
 matrix_pairs <- as.matrix(df_pairs)
 write.csv(matrix_pairs, "data/Delays_by_Origin-Dest_Pairs_Top20_AA.csv")
-```
 
+#' 
